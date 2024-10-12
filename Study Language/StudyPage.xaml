@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Study_Language.StudyPage">
+
+    <StackLayout Padding="10" VerticalOptions="CenterAndExpand">
+
+        <!-- Переключатель между словами и предложениями -->
+        <Picker x:Name="dataPicker" Title="Выберите режим"
+                SelectedIndexChanged="OnDataPickerChanged"
+                WidthRequest="150">
+            <Picker.ItemsSource>
+                <x:Array Type="{x:Type x:String}">
+                    <x:String>Слова</x:String>
+                    <x:String>Предложения</x:String>
+                </x:Array>
+            </Picker.ItemsSource>
+        </Picker>
+
+        <StackLayout Orientation="Horizontal"
+             HorizontalOptions="Center"
+             Padding="10" >
+            <!-- Отображение перевода, который нужно угадать -->
+            <Label x:Name="translationLabel" 
+               Text="Здесь будет перевод"
+               FontSize="Large"
+               VerticalOptions="CenterAndExpand"
+               Padding="15"/>
+            <!-- Кнопка озвучивания -->
+            <Image Source="sound.png"
+                WidthRequest="25"
+                HeightRequest="25"
+                VerticalOptions="CenterAndExpand"
+                Margin="10,0,0,0">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnSpeakButtonClicked" />
+                </Image.GestureRecognizers>
+            </Image>
+        </StackLayout>
+        
+        <!-- Поле для ввода ответа -->
+        <Entry x:Name="answerEntry" Placeholder="Введите слово или фразу" />
+
+        <!-- Кнопка проверки ответа -->
+        <Button Text="Проверить" Clicked="OnCheckAnswerClicked" Margin="15, 30, 15, 15"/>
+
+        <!-- Результат проверки -->
+        <Label x:Name="resultLabel" Text="" FontSize="Medium" HorizontalOptions="Center" Margin="15"/>
+
+        <!-- Кнопка следующего вопроса -->
+        <Button Text="Следующее" Clicked="OnNextClicked" Margin="15"/>
+
+    </StackLayout>
+
+</ContentPage>

@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:Study_Language"
+             x:Class="Study_Language.MainPage">
+
+    <!-- Добавляем ресурсы (включаем конвертер) -->
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <local:WordPhraseConverter x:Key="WordPhraseConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <!-- Основная разметка -->
+    <Grid RowDefinitions="Auto, *, Auto">
+        
+        <!-- Переключатель между словами и предложениями -->
+        <Picker x:Name="dataPicker" Title="Выберите режим"
+            SelectedIndexChanged="OnDataPickerChanged"
+            WidthRequest="150"
+            Grid.Row="0"
+            Margin="10">
+            <Picker.ItemsSource>
+                <x:Array Type="{x:Type x:String}">
+                    <x:String>Слова</x:String>
+                    <x:String>Предложения</x:String>
+                </x:Array>
+            </Picker.ItemsSource>
+        </Picker>
+        
+        <!-- CollectionView -->
+        <CollectionView x:Name="wordsCollectionView" 
+                        VerticalOptions="FillAndExpand"
+                        SelectionMode="Single" 
+                        SelectionChanged="OnWordTapped"
+                        Grid.Row="1">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <StackLayout Padding="10" Orientation="Horizontal">
+
+                        <!-- Кнопка озвучивания -->
+                        <Image Source="sound.png"
+                            WidthRequest="20"
+                            HeightRequest="20"
+                            Margin="0,0,10,0"
+                            VerticalOptions="Center"
+                            HorizontalOptions="Center">
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnSpeakButtonClicked" />
+                            </Image.GestureRecognizers>
+                        </Image>
+                        <!-- Отображение слова или фразы -->
+                        <Label Text="{Binding Word}" 
+                            VerticalOptions="Start" 
+                            HorizontalOptions="FillAndExpand"
+                            LineBreakMode="WordWrap"
+                            MaxLines="5"
+                            IsVisible="{Binding Source={x:Reference dataPicker}, Path=SelectedItem, Converter={StaticResource WordPhraseConverter}, ConverterParameter='Word'}" />
+                        <Label Text="{Binding Phrase}"
+                            VerticalOptions="Start" 
+                            HorizontalOptions="FillAndExpand"
+                            LineBreakMode="WordWrap"
+                            MaxLines="5"
+                            IsVisible="{Binding Source={x:Reference dataPicker}, Path=SelectedItem, Converter={StaticResource WordPhraseConverter}, ConverterParameter='Phrase'}" />
+                        <!-- Разделитель -->
+                        <Label Text="   " WidthRequest="20" />
+                        <!-- Перевод -->
+                        <Label Text="{Binding Translation}" 
+                            VerticalOptions="Start" 
+                            HorizontalOptions="FillAndExpand"
+                            LineBreakMode="WordWrap"
+                            MaxLines="5" />
+                    </StackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <!-- Кнопки -->
+        <StackLayout Orientation="Horizontal" 
+                     HorizontalOptions="FillAndExpand" 
+                     VerticalOptions="End" 
+                     Padding="10" 
+                     BackgroundColor="LightGray"
+                     Grid.Row="2">
+            <Button Text="Добавить" Clicked="OnAddWordClicked" HorizontalOptions="StartAndExpand" />
+            <Button Text="Удалить" Clicked="OnDeleteWordClicked" HorizontalOptions="EndAndExpand" />
+        </StackLayout>
+    </Grid>
+</ContentPage>
